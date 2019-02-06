@@ -39,8 +39,8 @@ library(dplyr)
 ```
 
 ```{r}
-economy <- mean(orangeEconomy$GDP.PC)
-orangeEconomy <- orangeEconomy %>% mutate(strong_economy = ifelse(GDP.PC < economy,
+meanEconomy <- mean(orangeEconomy$GDP.PC)
+orangeEconomy <- orangeEconomy %>% mutate(strong_economy = ifelse(GDP.PC < meanEconomy,
                                                                   "Por debajo del pib per capita promedio",
                                                                   "Igual o sobre el pib per capita promedio"))
 ```
@@ -61,6 +61,24 @@ theme(panel.background = element_blank(),
 
 ```
 
+```{r}
+library(RColorBrewer)
+```
+
+```{r}
+scaleColors = brewer.pal(9,"Reds")
+
+topEconomiaNaranja <- orangeEconomy %>% 
+  filter(GDP.PC > meanEconomy)
+
+ggplot(topEconomiaNaranja,
+       aes(x=Internet.penetration...population,
+           y=GDP.PC,
+           fill=Creat.Ind...GDP)) +
+geom_tile() +
+facet_wrap(~Country) +
+scale_fill_gradientn(colors=scaleColors)
+```
 
 
 
